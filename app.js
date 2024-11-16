@@ -15,10 +15,6 @@ const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Connection successfully !"));
 
-app.get('/', (req, res) => {
-    res.send("This is the home page");
-});
-
 app.use("/posts", postRoutes);
 app.use("/comments", CommentRoutes);
 
