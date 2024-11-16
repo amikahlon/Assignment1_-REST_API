@@ -1,0 +1,29 @@
+{
+  "name": "assignment1_-rest_api",
+  "version": "1.0.0",
+  "description": "Ami Kahlon  &  Guy Mishan",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amikahlon/Assignment1_-REST_API.git"
+  },
+  "author": "Ami & Guy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amikahlon/Assignment1_-REST_API/issues"
+  },
+  "homepage": "https://github.com/amikahlon/Assignment1_-REST_API#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
