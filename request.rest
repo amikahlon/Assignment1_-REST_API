@@ -1,1 +1,23 @@
-GET http://localhost:3000
+y### Add a New Comment
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+    "postId": "<post_id>",
+    "content": "This is a comment.",
+    "commenter": "commenter123"
+}
+
+### Get All Comments for a Post
+GET http://localhost:3000/comments/<post_id>
+
+### Update a Comment
+PUT http://localhost:3000/comments/<comment_id>
+Content-Type: application/json
+
+{
+    "content": "Updated comment content."
+}
+
+### Delete a Comment
+DELETE http://localhost:3000/comments/<comment_id>
