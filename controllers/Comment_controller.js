@@ -1,8 +1,16 @@
 const Comment = require('../models/Comment_model');
+const Post = require('../models/Post_model');
 
 // Add a New Comment
 const addComment = async (req, res) => {
     try {
+        // בדיקה אם הפוסט קיים
+        const postExists = await Post.findById(req.body.postId);
+        if (!postExists) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // יצירת התגובה ושמירתה
         const comment = new Comment(req.body);
         const savedComment = await comment.save();
         res.status(201).json(savedComment);
