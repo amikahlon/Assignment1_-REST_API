@@ -1,4 +1,4 @@
-const postRoutes = require("./routes/post_route");
+const postRoutes = require("./routes/Post_route");
 const CommentRoutes = require("./routes/Comment_route");
 const bodyParser = require('body-parser');
 const express = require('express');
