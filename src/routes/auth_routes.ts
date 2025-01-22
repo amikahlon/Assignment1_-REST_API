@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import { body } from "express-validator";
 import {
   register,
@@ -7,7 +7,7 @@ import {
   refresh,
 } from "../controllers/auth_controller";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 /**
  * @swagger
@@ -58,7 +58,9 @@ const validateRegistration = [
   body("email").isEmail().normalizeEmail().withMessage("Invalid email format"),
   body("password")
     .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
+    .withMessage("Password must be at least 6 characters long")
+    .matches(/\d/)
+    .withMessage("Password must contain at least one number"),
   body("username")
     .trim()
     .isLength({ min: 3 })
@@ -89,23 +91,58 @@ router.post("/register", validateRegistration, register);
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Log in a user
  *     tags: [Auth]
+ *     summary: Login to get access token
+ *     description: Login with email and password to receive access and refresh tokens
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *             example:
+ *               email: "user@example.com"
+ *               password: "password123"
  *     responses:
  *       200:
- *         description: Successful login, returns tokens
+ *         description: Login successful
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Tokens'
- *       400:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                 tokens:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
+ *                       type: string
+ *       401:
  *         description: Invalid credentials
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal server error
  */
 router.post("/login", login);
 
@@ -131,7 +168,7 @@ router.post("/login", login);
  *       400:
  *         description: Invalid or missing refresh token
  */
-router.post("/logout", logout);
+router.post("/logout", (req, res) => logout(req, res));
 
 /**
  * @swagger
@@ -145,20 +182,33 @@ router.post("/logout", logout);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - refreshToken
  *             properties:
  *               refreshToken:
  *                 type: string
- *                 description: The refresh token to generate a new access token
+ *                 description: The refresh token to generate new tokens
+ *             example:
+ *               refreshToken: "your.refresh.token"
  *     responses:
  *       200:
- *         description: Returns a new access token and refresh token
+ *         description: New tokens generated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Tokens'
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                   description: New access token
+ *                 refreshToken:
+ *                   type: string
+ *                   description: New refresh token
  *       400:
- *         description: Invalid or missing refresh token
+ *         description: Invalid refresh token
+ *       401:
+ *         description: Unauthorized
  */
-router.post("/refresh", refresh);
+router.post("/refresh", (req, res) => refresh(req, res));
 
 export default router;

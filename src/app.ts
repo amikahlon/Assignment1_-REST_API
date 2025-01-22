@@ -1,25 +1,59 @@
 import express from "express";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import postsRoutes from "./routes/posts_routes";
-import commentsRoutes from "./routes/comments_routes";
+import swaggerUI from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
+import posts_routes from "./routes/post_route";
+import comments_routes from "./routes/Comment_route";
+import auth_routes from "./routes/auth_routes";
 
-dotenv.config();
 const app = express();
-const port = process.env.PORT || 3000;
 
+// Middleware לעיבוד JSON ונתונים
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.DB_CONNECT);
-const db = mongoose.connection;
-db.on("error", (error) => console.log(error));
-db.once("open", () => console.log("Connection successfully !"));
+// הגדרת Swagger
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Social Network API",
+      version: "1.0.0",
+      description: "REST server for posts, comments, and authentication",
+    },
+    servers: [{ url: "http://localhost:3000" }],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ["./src/routes/*.ts", "./dist/routes/*.js"], // נתיבים לקבצי המסלולים
+};
 
-app.use("/posts", postsRoutes);
-app.use("/comments", commentsRoutes);
+const swaggerDocs = swaggerJsDoc(options);
+app.use(
+  "/api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocs, {
+    swaggerOptions: {
+      persistAuthorization: true, // שמירה על ה-Bearer Token
+    },
+  })
+);
 
-app.listen(port, () => {
-  console.log(`Listening at port: ${port}`);
-});
+// Routes
+app.use("/posts", posts_routes);
+app.use("/comments", comments_routes);
+app.use("/auth", auth_routes);
+
+export default app; // Make sure this is a default export
