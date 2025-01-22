@@ -43,13 +43,26 @@ const updateComment = async (req, res) => {
 // Delete a Comment
 const deleteComment = async (req, res) => {
     try {
+        const comment = await Comment.findById(req.params.id);
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+
+        const postExists = await Post.findById(comment.postId);
+        if (!postExists) {
+            return res.status(400).json({ message: 'Cannot delete comment: associated post no longer exists' });
+        }
+
         const deletedComment = await Comment.findByIdAndDelete(req.params.id);
-        if (!deletedComment) return res.status(404).json({ message: 'Comment not found' });
-        res.json(deletedComment);
+        res.json({
+            message: 'Comment deleted successfully',
+            comment: deletedComment
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 module.exports = {
     addComment,

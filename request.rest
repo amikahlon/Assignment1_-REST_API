@@ -3,22 +3,22 @@ POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "title": "My second post",
-    "content": "This is the content of the post.",
-    "sender": "ami"
+    "title": "The post of Guy",
+    "content": "Hi, my name is Guy!",
+    "sender": "guy"
 }
 
 ### קבלת כל הפוסטים
 GET http://localhost:3000/posts
 
 ### קבלת פוסט לפי ID
-GET http://localhost:3000/posts/673b7969a77f9a809d2dfd38
+GET http://localhost:3000/posts/679089de575ad2c8657a57b6
 
 ### קבלת פוסטים לפי מזהה שולח
-GET http://localhost:3000/posts?sender=ami
+GET http://localhost:3000/posts?sender=guy
 
 ### עדכון פוסט
-PUT http://localhost:3000/posts/673b7969a77f9a809d2dfd38
+PUT http://localhost:3000/posts/679089de575ad2c8657a57b6
 Content-Type: application/json
 
 {
@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### מחיקת פוסט
-DELETE http://localhost:3000/posts/id id id id idi d 
+DELETE http://localhost:3000/posts/679089de575ad2c8657a57b6
 
 
 ////////////////////////////////////////////////////////////////////////////////// 
@@ -39,16 +39,16 @@ POST http://localhost:3000/comments
 Content-Type: application/json
 
 {
-    "postId": "673b7969a77f9a809d2dfd38",
-    "content": "This is a comment 222.",
-    "commenter": "commenter123"
+    "postId": "679089de575ad2c8657a57b6",
+    "content": "This is comment from ami to guy! 2 ",
+    "commenter": "ami"
 }
 
 ### Get All Comments for a Post
-GET http://localhost:3000/comments/673b7969a77f9a809d2dfd38
+GET http://localhost:3000/comments/679089de575ad2c8657a57b6
 
 ### Update a Comment
-PUT http://localhost:3000/comments/673b8a58bd1aa1bbc53c769f
+PUT http://localhost:3000/comments/679089fd575ad2c8657a57be
 Content-Type: application/json
 
 {
@@ -56,4 +56,4 @@ Content-Type: application/json
 }
 
 ### Delete a Comment
-DELETE http://localhost:3000/comments/673b8a21bd1011bbc53c769b
+DELETE http://localhost:3000/comments/679089fd575ad2c8657a57be
