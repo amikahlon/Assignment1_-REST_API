@@ -1,12 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "strict": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "moduleResolution": "node"
-  },
-  "lib": ["es2015"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
